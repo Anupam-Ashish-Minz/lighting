@@ -103,6 +103,7 @@ int main() {
 	glEnableVertexAttribArray(0);
 
 	while (!glfwWindowShouldClose(window)) {
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Set the clear color to blue
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
