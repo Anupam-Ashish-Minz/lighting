@@ -1,9 +1,19 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 #define WIDTH 1280
 #define HEIGHT 720
+
+std::string read_to_string(const char *path) {
+	std::fstream f(path);
+	std::stringstream ss;
+	ss << f.rdbuf();
+	return ss.str();
+}
 
 int main() {
 	if (!glfwInit()) {
@@ -32,6 +42,36 @@ int main() {
 		-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f,
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+
+	std::string vertexShaderCode = read_to_string("vertex.glsl");
+	const char *vertexShaderCodePointer = vertexShaderCode.c_str();
+
+	std::string fragmentShaderCode = read_to_string("fragment.glsl");
+	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const char *fragmentShaderCodePointer = fragmentShaderCode.c_str();
+
+	glShaderSource(vertexShader, 1, &vertexShaderCodePointer, NULL);
+	glShaderSource(fragmentShader, 1, &fragmentShaderCodePointer, NULL);
+	glCompileShader(vertexShader);
+	int status;
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+
+#define S_LOG_BUF 100
+	char log[S_LOG_BUF];
+	int len;
+	if (status == GL_FALSE) {
+		glGetShaderInfoLog(vertexShader, S_LOG_BUF, &len, log);
+		std::cerr << log << std::endl;
+	}
+
+	glCompileShader(fragmentShader);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE) {
+		glGetShaderInfoLog(fragmentShader, S_LOG_BUF, &len, log);
+		std::cerr << log << std::endl;
+	}
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
