@@ -8,6 +8,15 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
+								GLenum severity, GLsizei length,
+								const GLchar *message, const void *userParam) {
+	fprintf(stderr,
+			"GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type,
+			severity, message);
+}
+
 std::string read_to_string(const char *path) {
 	std::fstream f(path);
 	std::stringstream ss;
@@ -29,6 +38,10 @@ int main() {
 		std::cerr << "failed to init glfw" << std::endl;
 		return -1;
 	}
+
+	// During init, enable debug output
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 
 	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
@@ -71,6 +84,19 @@ int main() {
 	if (status == GL_FALSE) {
 		glGetShaderInfoLog(fragmentShader, S_LOG_BUF, &len, log);
 		std::cerr << log << std::endl;
+	}
+
+	unsigned int program = glCreateProgram();
+	glAttachShader(program, vertexShader);
+	glAttachShader(program, fragmentShader);
+	glLinkProgram(program);
+
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (status == GL_FALSE) {
+		glGetProgramInfoLog(program, S_LOG_BUF, &len, log);
+		std::cerr << log << std::endl;
+	} else {
+		glUseProgram(program);
 	}
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
