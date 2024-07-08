@@ -15,6 +15,10 @@ using glm::vec3;
 #define WIDTH 1280
 #define HEIGHT 720
 
+vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);
+vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
+vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
+
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
 								GLenum severity, GLsizei length,
 								const GLchar *message, const void *userParam) {
@@ -29,6 +33,11 @@ std::string read_to_string(const char *path) {
 	std::stringstream ss;
 	ss << f.rdbuf();
 	return ss.str();
+}
+
+void process_input(GLFWwindow *window) {
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+	}
 }
 
 int main() {
@@ -130,8 +139,7 @@ int main() {
 
 	projection = glm::perspective(glm::radians(-45.0f),
 								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-	view = glm::lookAt(vec3(0.0f, 0.0f, 0.3f), vec3(0.0f, 0.0f, 0.0f),
-					   vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
@@ -140,6 +148,7 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
+		process_input(window);
 
 		glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
