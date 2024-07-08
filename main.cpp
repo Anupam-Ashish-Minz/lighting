@@ -51,6 +51,12 @@ void process_key_input(GLFWwindow *window) {
 		cameraPos -=
 			glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		cameraPos -= cameraSpeed * cameraUp;
+	}
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+		cameraPos += cameraSpeed * cameraUp;
+	}
 }
 
 bool firstMouse = true;
