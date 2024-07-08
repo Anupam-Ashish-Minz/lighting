@@ -19,6 +19,9 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 class Shader {
   private:
 	unsigned int ID;
+	unsigned int u_Model;
+	unsigned int u_View;
+	unsigned int u_Projection;
 
 	std::string read_file(const char *path) {
 		std::ifstream f(path);
@@ -74,6 +77,10 @@ class Shader {
 		}
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+
+		this->u_Model = glGetUniformLocation(this->ID, "model");
+		this->u_View = glGetUniformLocation(this->ID, "view");
+		this->u_Projection = glGetUniformLocation(this->ID, "projection");
 	}
 
 	void use() { glUseProgram(this->ID); }
@@ -87,7 +94,18 @@ class Shader {
 					 glm::value_ptr(value));
 	}
 
-	void setUniformMatrix4(const char *name, glm::mat4 value) {}
+	void setModelMatrix(glm::mat4 value) {
+		glUniformMatrix4fv(this->u_Model, 1, GL_FALSE, glm::value_ptr(value));
+	}
+
+	void setViewMatrix(glm::mat4 value) {
+		glUniformMatrix4fv(this->u_View, 1, GL_FALSE, glm::value_ptr(value));
+	}
+
+	void setProjectionMatrix(glm::mat4 value) {
+		glUniformMatrix4fv(this->u_Projection, 1, GL_FALSE,
+						   glm::value_ptr(value));
+	}
 };
 
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
@@ -235,21 +253,11 @@ int main() {
 				 GL_STATIC_DRAW);
 
 	Shader *baseShader = new Shader("vertex.glsl", "fragment.glsl");
-	baseShader->use();
-
-	unsigned int u_Model = baseShader->createUniform("model");
-	unsigned int u_View = baseShader->createUniform("view");
-	unsigned int u_Projection = baseShader->createUniform("projection");
-
-	baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-	baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-
-	projection = glm::perspective(glm::radians(-45.0f),
-								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(
+		glm::radians(-45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
@@ -265,10 +273,13 @@ int main() {
 
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-		glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(u_Projection, 1, GL_FALSE,
-						   glm::value_ptr(projection));
+		baseShader->use();
+
+		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		baseShader->setModelMatrix(model);
+		baseShader->setViewMatrix(view);
+		baseShader->setProjectionMatrix(projection);
 
 		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
