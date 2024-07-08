@@ -12,7 +12,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
-glm::vec3 cameraPos = glm::vec3(0.0f, -5.0f, 30.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -196,7 +196,14 @@ int main() {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+
 	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	unsigned int lightingVAO;
+	glGenVertexArrays(1, &lightingVAO);
+	glBindVertexArray(lightingVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
@@ -246,16 +253,13 @@ int main() {
 	glm::mat4 projection = glm::perspective(
 		glm::radians(-45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
-	unsigned int lightingVAO;
-	glGenVertexArrays(1, &lightingVAO);
-	glBindVertexArray(lightingVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
 	Shader *lightingShader = new Shader("vertex.glsl", "lighting.glsl");
 
 	glBindVertexArray(VAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);
 
+	glBindVertexArray(lightingVAO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
@@ -265,6 +269,7 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		glfwPollEvents();
 		process_key_input(window);
 
@@ -275,8 +280,13 @@ int main() {
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		baseShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
+		lightingShader->use();
+		lightingShader->setMVPMatrix(model, view, projection);
+		glBindVertexArray(lightingVAO);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,
+					   (void *)(36 * sizeof(unsigned int)));
 		glfwSwapBuffers(window);
 	}
 
