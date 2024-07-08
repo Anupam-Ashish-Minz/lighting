@@ -36,7 +36,20 @@ std::string read_to_string(const char *path) {
 }
 
 void process_input(GLFWwindow *window) {
+	const float cameraSpeed = 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		cameraPos += cameraSpeed * cameraFront;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		cameraPos +=
+			glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		cameraPos -=
+			glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
 }
 
@@ -72,6 +85,10 @@ int main() {
 		0.0f, 1.0f, 0.0f, ///
 		1.0f, 0.0f, 0.0f, ///
 		1.0f, 1.0f, 0.0f, ///
+		0.0f, 0.0f, 0.1f, ///
+		0.0f, 1.0f, 0.1f, ///
+		1.0f, 0.0f, 0.1f, ///
+		1.0f, 1.0f, 0.1f, ///
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -139,7 +156,6 @@ int main() {
 
 	projection = glm::perspective(glm::radians(-45.0f),
 								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
@@ -149,6 +165,8 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
 		process_input(window);
+
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 		glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
