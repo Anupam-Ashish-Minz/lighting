@@ -19,6 +19,77 @@ vec3 cameraPos = vec3(0.5f, 0.5f, 3.0f);
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
 
+class Shader {
+  private:
+	unsigned int ID;
+
+	std::string read_file(const char *path) {
+		std::ifstream f(path);
+		std::stringstream ss;
+		ss << f.rdbuf();
+		return ss.str();
+	}
+
+  public:
+	Shader(const char *vertexShaderPath, const char *fragmentShaderPath) {
+		std::string vertexShaderCode = this->read_file(vertexShaderPath);
+		const char *vertexShaderCodePointer = vertexShaderCode.c_str();
+		std::string fragmentShaderCode = this->read_file(fragmentShaderPath);
+		const char *fragmentShaderCodePointer = fragmentShaderCode.c_str();
+
+		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+		glShaderSource(vertexShader, 1, &vertexShaderCodePointer, NULL);
+		glShaderSource(fragmentShader, 1, &fragmentShaderCodePointer, NULL);
+
+		int status;
+		glCompileShader(vertexShader);
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+#define S_LOG_BUF 100
+		char log[S_LOG_BUF];
+		int len;
+		if (status == GL_FALSE) {
+			std::cerr << "**GL error**" << "failed to complie vertex shader"
+					  << std::endl;
+			glGetShaderInfoLog(vertexShader, S_LOG_BUF, &len, log);
+			std::cerr << log << std::endl;
+		}
+
+		glCompileShader(fragmentShader);
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
+		if (status == GL_FALSE) {
+			std::cerr << "**GL error**" << "failed to complie fragment shader"
+					  << std::endl;
+			glGetShaderInfoLog(fragmentShader, S_LOG_BUF, &len, log);
+			std::cerr << log << std::endl;
+		}
+		this->ID = glCreateProgram();
+		glAttachShader(this->ID, vertexShader);
+		glAttachShader(this->ID, fragmentShader);
+		glLinkProgram(this->ID);
+		glGetProgramiv(this->ID, GL_LINK_STATUS, &status);
+		if (status == GL_FALSE) {
+			std::cerr << "**GL error**" << "failed to link the program"
+					  << std::endl;
+			glGetProgramInfoLog(this->ID, S_LOG_BUF, &len, log);
+			std::cerr << log << std::endl;
+		}
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+	}
+
+	void use() { glUseProgram(this->ID); }
+
+	unsigned int createUniform(const char *name) {
+		return glGetUniformLocation(this->ID, name);
+	}
+	void setUniformVec3(const char *name, vec3 value) {
+		glUniform3fv(glGetUniformLocation(this->ID, name), 1,
+					 glm::value_ptr(value));
+	}
+};
+
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
 								GLenum severity, GLsizei length,
 								const GLchar *message, const void *userParam) {
@@ -26,13 +97,6 @@ void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
 			"GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
 			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type,
 			severity, message);
-}
-
-std::string read_to_string(const char *path) {
-	std::fstream f(path);
-	std::stringstream ss;
-	ss << f.rdbuf();
-	return ss.str();
 }
 
 void process_key_input(GLFWwindow *window) {
@@ -170,60 +234,19 @@ int main() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
 				 GL_STATIC_DRAW);
 
-	std::string vertexShaderCode = read_to_string("vertex.glsl");
-	const char *vertexShaderCodePointer = vertexShaderCode.c_str();
+	Shader *baseShader = new Shader("vertex.glsl", "fragment.glsl");
+	baseShader->use();
 
-	std::string fragmentShaderCode = read_to_string("fragment.glsl");
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	unsigned int u_Model = baseShader->createUniform("model");
+	unsigned int u_View = baseShader->createUniform("view");
+	unsigned int u_Projection = baseShader->createUniform("projection");
 
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	const char *fragmentShaderCodePointer = fragmentShaderCode.c_str();
-
-	glShaderSource(vertexShader, 1, &vertexShaderCodePointer, NULL);
-	glShaderSource(fragmentShader, 1, &fragmentShaderCodePointer, NULL);
-	glCompileShader(vertexShader);
-	int status;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-
-#define S_LOG_BUF 100
-	char log[S_LOG_BUF];
-	int len;
-	if (status == GL_FALSE) {
-		glGetShaderInfoLog(vertexShader, S_LOG_BUF, &len, log);
-		std::cerr << log << std::endl;
-	}
-
-	glCompileShader(fragmentShader);
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE) {
-		glGetShaderInfoLog(fragmentShader, S_LOG_BUF, &len, log);
-		std::cerr << log << std::endl;
-	}
-
-	unsigned int program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
-
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE) {
-		glGetProgramInfoLog(program, S_LOG_BUF, &len, log);
-		std::cerr << log << std::endl;
-	} else {
-		glUseProgram(program);
-	}
-
-	unsigned int u_Model = glGetUniformLocation(program, "model");
-	unsigned int u_View = glGetUniformLocation(program, "view");
-	unsigned int u_Projection = glGetUniformLocation(program, "projection");
-	unsigned int u_objectColor = glGetUniformLocation(program, "objectColor");
-	unsigned int u_lightColor = glGetUniformLocation(program, "lightColor");
+	baseShader->setUniformVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
+	baseShader->setUniformVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
 
 	mat4 model = mat4(1.0f);
 	mat4 view = mat4(1.0f);
 	mat4 projection = mat4(1.0f);
-	vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
-	vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
 
 	projection = glm::perspective(glm::radians(-45.0f),
 								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -246,8 +269,6 @@ int main() {
 		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(u_Projection, 1, GL_FALSE,
 						   glm::value_ptr(projection));
-		glUniform3fv(u_objectColor, 1, glm::value_ptr(objectColor));
-		glUniform3fv(u_lightColor, 1, glm::value_ptr(lightColor));
 
 		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
