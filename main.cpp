@@ -55,7 +55,7 @@ void process_key_input(GLFWwindow *window) {
 
 bool firstMouse = true;
 float lastX, lastY;
-float yaw = 0.0f;
+float yaw = -90.0f;
 float pitch = 0.0f;
 
 void process_mouse_input(GLFWwindow *window, double xpos, double ypos) {
@@ -63,15 +63,14 @@ void process_mouse_input(GLFWwindow *window, double xpos, double ypos) {
 		lastX = xpos;
 		lastY = ypos;
 		firstMouse = false;
-		return;
 	}
 
-	float xoffset = xpos - lastX;
+	const float sensitivity = 0.1f;
+	float xoffset = lastX - xpos;
 	float yoffset = ypos - lastY;
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
@@ -89,6 +88,7 @@ void process_mouse_input(GLFWwindow *window, double xpos, double ypos) {
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
 	cameraFront = glm::normalize(direction);
 }
 
@@ -199,7 +199,7 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, process_mouse_input);
 
 	while (!glfwWindowShouldClose(window)) {
