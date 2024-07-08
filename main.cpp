@@ -39,7 +39,6 @@ int main() {
 		return -1;
 	}
 
-	// During init, enable debug output
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
 
@@ -50,11 +49,19 @@ int main() {
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-	float data[] = {
-		-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f,
+	float vertices[] = {
+		0.0f, 0.0f, 0.0f, ///
+		0.0f, 1.0f, 0.0f, ///
+		1.0f, 0.0f, 0.0f, ///
+		1.0f, 1.0f, 0.0f, ///
 	};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	unsigned int indices[] = {0, 1, 2};
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+				 GL_STATIC_DRAW);
 
 	std::string vertexShaderCode = read_to_string("vertex.glsl");
 	const char *vertexShaderCodePointer = vertexShaderCode.c_str();
@@ -106,7 +113,7 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Set the clear color to blue
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 	}
 
