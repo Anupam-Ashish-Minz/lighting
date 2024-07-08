@@ -85,10 +85,10 @@ int main() {
 		0.0f, 1.0f, 0.0f, ///
 		1.0f, 0.0f, 0.0f, ///
 		1.0f, 1.0f, 0.0f, ///
-		0.0f, 0.0f, 0.1f, ///
-		0.0f, 1.0f, 0.1f, ///
-		1.0f, 0.0f, 0.1f, ///
-		1.0f, 1.0f, 0.1f, ///
+		0.0f, 0.0f, 1.0f, ///
+		0.0f, 1.0f, 1.0f, ///
+		1.0f, 0.0f, 1.0f, ///
+		1.0f, 1.0f, 1.0f, ///
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
