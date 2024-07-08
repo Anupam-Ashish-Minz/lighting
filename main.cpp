@@ -94,17 +94,11 @@ class Shader {
 					 glm::value_ptr(value));
 	}
 
-	void setModelMatrix(glm::mat4 value) {
-		glUniformMatrix4fv(this->u_Model, 1, GL_FALSE, glm::value_ptr(value));
-	}
-
-	void setViewMatrix(glm::mat4 value) {
-		glUniformMatrix4fv(this->u_View, 1, GL_FALSE, glm::value_ptr(value));
-	}
-
-	void setProjectionMatrix(glm::mat4 value) {
+	void setMVPMatrix(glm::mat4 model, glm::mat4 view, glm::mat4 projection) {
+		glUniformMatrix4fv(this->u_Model, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(this->u_View, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(this->u_Projection, 1, GL_FALSE,
-						   glm::value_ptr(value));
+						   glm::value_ptr(projection));
 	}
 };
 
@@ -202,14 +196,7 @@ int main() {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
-
-	unsigned int light_VAO;
-	glGenVertexArrays(1, &light_VAO);
-
 	glBindVertexArray(VAO);
-
-	glBindVertexArray(light_VAO);
-
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
@@ -259,6 +246,16 @@ int main() {
 	glm::mat4 projection = glm::perspective(
 		glm::radians(-45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
+	unsigned int lightingVAO;
+	glGenVertexArrays(1, &lightingVAO);
+	glBindVertexArray(lightingVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	Shader *lightingShader = new Shader("vertex.glsl", "lighting.glsl");
+
+	glBindVertexArray(VAO);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
@@ -274,14 +271,17 @@ int main() {
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 		baseShader->use();
-
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		baseShader->setModelMatrix(model);
-		baseShader->setViewMatrix(view);
-		baseShader->setProjectionMatrix(projection);
+		baseShader->setMVPMatrix(model, view, projection);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+		lightingShader->use();
+		lightingShader->setMVPMatrix(model, view, projection);
+		glBindVertexArray(lightingVAO);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)36);
+
 		glfwSwapBuffers(window);
 	}
 
