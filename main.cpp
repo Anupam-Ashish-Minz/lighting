@@ -12,10 +12,10 @@
 using glm::mat4;
 using glm::vec3;
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 1920
+#define HEIGHT 1080
 
-vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);
+vec3 cameraPos = vec3(0.5f, 0.5f, 3.0f);
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
 
