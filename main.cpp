@@ -121,6 +121,10 @@ int main() {
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
 
+	unsigned int light_VAO;
+	glGenVertexArrays(1, &light_VAO);
+	glBindVertexArray(light_VAO);
+
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -194,10 +198,14 @@ int main() {
 	unsigned int u_Model = glGetUniformLocation(program, "model");
 	unsigned int u_View = glGetUniformLocation(program, "view");
 	unsigned int u_Projection = glGetUniformLocation(program, "projection");
+	unsigned int u_objectColor = glGetUniformLocation(program, "objectColor");
+	unsigned int u_lightColor = glGetUniformLocation(program, "lightColor");
 
 	mat4 model = mat4(1.0f);
 	mat4 view = mat4(1.0f);
 	mat4 projection = mat4(1.0f);
+	vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
+	vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
 
 	projection = glm::perspective(glm::radians(-45.0f),
 								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -220,6 +228,8 @@ int main() {
 		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(u_Projection, 1, GL_FALSE,
 						   glm::value_ptr(projection));
+		glUniform3fv(u_objectColor, 1, glm::value_ptr(objectColor));
+		glUniform3fv(u_lightColor, 1, glm::value_ptr(lightColor));
 
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
