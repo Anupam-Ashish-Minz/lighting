@@ -1,9 +1,16 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
+
+using glm::mat4;
+using glm::vec3;
 
 #define WIDTH 1280
 #define HEIGHT 720
@@ -113,6 +120,19 @@ int main() {
 		glUseProgram(program);
 	}
 
+	unsigned int u_Model = glGetUniformLocation(program, "model");
+	unsigned int u_View = glGetUniformLocation(program, "view");
+	unsigned int u_Projection = glGetUniformLocation(program, "projection");
+
+	mat4 model = mat4(1.0f);
+	mat4 view = mat4(1.0f);
+	mat4 projection = mat4(1.0f);
+
+	projection = glm::perspective(glm::radians(-45.0f),
+								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+	view = glm::lookAt(vec3(0.0f, 0.0f, 0.3f), vec3(0.0f, 0.0f, 0.0f),
+					   vec3(0.0f, 1.0f, 0.0f));
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
 
@@ -120,6 +140,12 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Set the clear color to blue
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
+
+		glUniformMatrix4fv(u_Model, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(u_View, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(u_Projection, 1, GL_FALSE,
+						   glm::value_ptr(projection));
+
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 	}
