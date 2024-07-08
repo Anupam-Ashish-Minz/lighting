@@ -123,9 +123,11 @@ int main() {
 
 	unsigned int light_VAO;
 	glGenVertexArrays(1, &light_VAO);
-	glBindVertexArray(light_VAO);
 
 	glBindVertexArray(VAO);
+
+	glBindVertexArray(light_VAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
