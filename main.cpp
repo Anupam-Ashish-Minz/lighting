@@ -9,15 +9,12 @@
 #include <sstream>
 #include <string>
 
-using glm::mat4;
-using glm::vec3;
-
 #define WIDTH 1920
 #define HEIGHT 1080
 
-vec3 cameraPos = vec3(0.5f, 0.5f, 3.0f);
-vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
-vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 cameraPos = glm::vec3(0.5f, 0.5f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 class Shader {
   private:
@@ -84,10 +81,13 @@ class Shader {
 	unsigned int createUniform(const char *name) {
 		return glGetUniformLocation(this->ID, name);
 	}
-	void setUniformVec3(const char *name, vec3 value) {
+
+	void setUniformVec3(const char *name, glm::vec3 value) {
 		glUniform3fv(glGetUniformLocation(this->ID, name), 1,
 					 glm::value_ptr(value));
 	}
+
+	void setUniformMatrix4(const char *name, glm::mat4 value) {}
 };
 
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
@@ -154,7 +154,7 @@ void process_mouse_input(GLFWwindow *window, double xpos, double ypos) {
 		pitch = -89.0f;
 	}
 
-	vec3 direction;
+	glm::vec3 direction;
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -241,12 +241,12 @@ int main() {
 	unsigned int u_View = baseShader->createUniform("view");
 	unsigned int u_Projection = baseShader->createUniform("projection");
 
-	baseShader->setUniformVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
-	baseShader->setUniformVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
+	baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+	baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
-	mat4 model = mat4(1.0f);
-	mat4 view = mat4(1.0f);
-	mat4 projection = mat4(1.0f);
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
 
 	projection = glm::perspective(glm::radians(-45.0f),
 								  (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
