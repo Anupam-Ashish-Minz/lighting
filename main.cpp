@@ -132,14 +132,23 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	float vertices[] = {
-		0.0f, 0.0f, 0.0f, ///
-		0.0f, 1.0f, 0.0f, ///
-		1.0f, 0.0f, 0.0f, ///
-		1.0f, 1.0f, 0.0f, ///
-		0.0f, 0.0f, 1.0f, ///
-		0.0f, 1.0f, 1.0f, ///
-		1.0f, 0.0f, 1.0f, ///
-		1.0f, 1.0f, 1.0f, ///
+		0.0f, 0.0f, 0.0f, /// 0
+		0.0f, 1.0f, 0.0f, /// 1
+		1.0f, 0.0f, 0.0f, /// 2
+		1.0f, 1.0f, 0.0f, /// 3
+		0.0f, 0.0f, 1.0f, /// 4
+		0.0f, 1.0f, 1.0f, /// 5
+		1.0f, 0.0f, 1.0f, /// 6
+		1.0f, 1.0f, 1.0f, /// 7
+		///
+		-6.0f, -6.0f, 6.0f, ///
+		-6.0f, -7.0f, 6.0f, ///
+		-7.0f, -6.0f, 6.0f, ///
+		-7.0f, -7.0f, 6.0f, ///
+		-6.0f, -6.0f, 7.0f, ///
+		-6.0f, -7.0f, 7.0f, ///
+		-7.0f, -6.0f, 7.0f, ///
+		-7.0f, -7.0f, 7.0f, ///
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -150,6 +159,13 @@ int main() {
 		1, 3, 5, 3, 5, 7, ///
 		2, 3, 6, 3, 6, 7, ///
 		4, 5, 6, 5, 6, 7, ///
+		///
+		8, 9, 10, 9, 10, 11,	///
+		8, 9, 12, 9, 12, 13,	///
+		8, 10, 12, 10, 12, 14,	///
+		9, 11, 13, 11, 13, 15,	///
+		10, 11, 14, 11, 14, 15, ///
+		12, 13, 14, 13, 14, 15, ///
 	};
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
 				 GL_STATIC_DRAW);
@@ -233,7 +249,7 @@ int main() {
 		glUniform3fv(u_objectColor, 1, glm::value_ptr(objectColor));
 		glUniform3fv(u_lightColor, 1, glm::value_ptr(lightColor));
 
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 	}
 
