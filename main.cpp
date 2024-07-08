@@ -12,7 +12,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
-glm::vec3 cameraPos = glm::vec3(0.5f, 0.5f, 3.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, -5.0f, 30.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -275,12 +275,7 @@ int main() {
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		baseShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-		lightingShader->use();
-		lightingShader->setMVPMatrix(model, view, projection);
-		glBindVertexArray(lightingVAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *)36);
+		glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 	}
