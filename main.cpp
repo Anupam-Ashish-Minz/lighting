@@ -59,7 +59,14 @@ int main() {
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	unsigned int indices[] = {0, 1, 2};
+	unsigned int indices[] = {
+		0, 1, 2, 1, 2, 3, ///
+		0, 1, 4, 1, 4, 5, ///
+		0, 2, 4, 2, 4, 6, ///
+		1, 3, 5, 3, 5, 7, ///
+		2, 3, 6, 3, 6, 7, ///
+		4, 5, 6, 5, 6, 7, ///
+	};
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
 				 GL_STATIC_DRAW);
 
@@ -113,7 +120,7 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Set the clear color to blue
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glfwSwapBuffers(window);
 	}
 
