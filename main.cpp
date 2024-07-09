@@ -121,47 +121,47 @@ int main() {
 
 	float vertices[] = {
 		/// front
-		0.0f, 0.0f, 0.0f, /// 0
-		0.0f, 1.0f, 0.0f, /// 1
-		1.0f, 0.0f, 0.0f, /// 2
-		0.0f, 1.0f, 0.0f, /// 1
-		1.0f, 0.0f, 0.0f, /// 2
-		1.0f, 1.0f, 0.0f, /// 3
+		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 0
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 1
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 2
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 1
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 2
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 3
 		/// back
-		0.0f, 0.0f, 1.0f, /// 4
-		0.0f, 1.0f, 1.0f, /// 5
-		1.0f, 0.0f, 1.0f, /// 6
-		0.0f, 1.0f, 1.0f, /// 5
-		1.0f, 0.0f, 1.0f, /// 6
-		1.0f, 1.0f, 1.0f, /// 7
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 4
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 5
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 6
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 5
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 6
+		1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 7
 		/// bottom
-		0.0f, 0.0f, 0.0f, /// 0
-		0.0f, 1.0f, 0.0f, /// 1
-		0.0f, 0.0f, 1.0f, /// 4
-		0.0f, 1.0f, 0.0f, /// 1
-		0.0f, 0.0f, 1.0f, /// 4
-		0.0f, 1.0f, 1.0f, /// 5
+		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 0
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 1
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 4
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 1
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 4
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 5
 		/// left
-		0.0f, 0.0f, 0.0f, /// 0
-		1.0f, 0.0f, 0.0f, /// 2
-		0.0f, 0.0f, 1.0f, /// 4
-		1.0f, 0.0f, 0.0f, /// 2
-		0.0f, 0.0f, 1.0f, /// 4
-		1.0f, 0.0f, 1.0f, /// 6
+		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 0
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 2
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 4
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 2
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 4
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 6
 		/// right
-		0.0f, 1.0f, 0.0f, /// 1
-		1.0f, 1.0f, 0.0f, /// 3
-		0.0f, 1.0f, 1.0f, /// 5
-		1.0f, 1.0f, 0.0f, /// 3
-		0.0f, 1.0f, 1.0f, /// 5
-		1.0f, 1.0f, 1.0f, /// 7
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 1
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 3
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 5
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 3
+		0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 5
+		1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 7
 		/// top
-		1.0f, 0.0f, 0.0f, /// 2
-		1.0f, 1.0f, 0.0f, /// 3
-		1.0f, 0.0f, 1.0f, /// 6
-		1.0f, 1.0f, 0.0f, /// 3
-		1.0f, 0.0f, 1.0f, /// 6
-		1.0f, 1.0f, 1.0f, /// 7
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 2
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 3
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 6
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, /// 3
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 6
+		1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, /// 7
 		/// lighting cube
 		/// front
 		-6.0f, -6.0f, 0.0f, /// 0
@@ -218,8 +218,11 @@ int main() {
 	Shader *lightingShader = new Shader("vertex.glsl", "lighting.glsl");
 
 	glBindVertexArray(VAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+						  (void *)(3 * sizeof(float)));
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(lightingVAO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -247,7 +250,7 @@ int main() {
 		lightingShader->use();
 		lightingShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(lightingVAO);
-		glDrawArrays(GL_TRIANGLES, 36, 36);
+		glDrawArrays(GL_TRIANGLES, 72, 36);
 		glfwSwapBuffers(window);
 	}
 
