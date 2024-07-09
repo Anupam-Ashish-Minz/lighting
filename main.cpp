@@ -120,43 +120,93 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	float vertices[] = {
+		/// front
 		0.0f, 0.0f, 0.0f, /// 0
 		0.0f, 1.0f, 0.0f, /// 1
 		1.0f, 0.0f, 0.0f, /// 2
+		0.0f, 1.0f, 0.0f, /// 1
+		1.0f, 0.0f, 0.0f, /// 2
 		1.0f, 1.0f, 0.0f, /// 3
+		/// back
 		0.0f, 0.0f, 1.0f, /// 4
 		0.0f, 1.0f, 1.0f, /// 5
 		1.0f, 0.0f, 1.0f, /// 6
+		0.0f, 1.0f, 1.0f, /// 5
+		1.0f, 0.0f, 1.0f, /// 6
 		1.0f, 1.0f, 1.0f, /// 7
-		///
-		-6.0f, -6.0f, 6.0f, ///
-		-6.0f, -7.0f, 6.0f, ///
-		-7.0f, -6.0f, 6.0f, ///
-		-7.0f, -7.0f, 6.0f, ///
-		-6.0f, -6.0f, 7.0f, ///
-		-6.0f, -7.0f, 7.0f, ///
-		-7.0f, -6.0f, 7.0f, ///
-		-7.0f, -7.0f, 7.0f, ///
+		/// bottom
+		0.0f, 0.0f, 0.0f, /// 0
+		0.0f, 1.0f, 0.0f, /// 1
+		0.0f, 0.0f, 1.0f, /// 4
+		0.0f, 1.0f, 0.0f, /// 1
+		0.0f, 0.0f, 1.0f, /// 4
+		0.0f, 1.0f, 1.0f, /// 5
+		/// left
+		0.0f, 0.0f, 0.0f, /// 0
+		1.0f, 0.0f, 0.0f, /// 2
+		0.0f, 0.0f, 1.0f, /// 4
+		1.0f, 0.0f, 0.0f, /// 2
+		0.0f, 0.0f, 1.0f, /// 4
+		1.0f, 0.0f, 1.0f, /// 6
+		/// right
+		0.0f, 1.0f, 0.0f, /// 1
+		1.0f, 1.0f, 0.0f, /// 3
+		0.0f, 1.0f, 1.0f, /// 5
+		1.0f, 1.0f, 0.0f, /// 3
+		0.0f, 1.0f, 1.0f, /// 5
+		1.0f, 1.0f, 1.0f, /// 7
+		/// top
+		1.0f, 0.0f, 0.0f, /// 2
+		1.0f, 1.0f, 0.0f, /// 3
+		1.0f, 0.0f, 1.0f, /// 6
+		1.0f, 1.0f, 0.0f, /// 3
+		1.0f, 0.0f, 1.0f, /// 6
+		1.0f, 1.0f, 1.0f, /// 7
+		/// lighting cube
+		/// front
+		-6.0f, -6.0f, 0.0f, /// 0
+		-6.0f, -7.0f, 0.0f, /// 1
+		-7.0f, -6.0f, 0.0f, /// 2
+		-6.0f, -7.0f, 0.0f, /// 1
+		-7.0f, -6.0f, 0.0f, /// 2
+		-7.0f, -7.0f, 0.0f, /// 3
+		/// back
+		-6.0f, -6.0f, 1.0f, /// 4
+		-6.0f, -7.0f, 1.0f, /// 5
+		-7.0f, -6.0f, 1.0f, /// 6
+		-6.0f, -7.0f, 1.0f, /// 5
+		-7.0f, -6.0f, 1.0f, /// 6
+		-7.0f, -7.0f, 1.0f, /// 7
+		/// bottom
+		-6.0f, -6.0f, 0.0f, /// 0
+		-6.0f, -7.0f, 0.0f, /// 1
+		-6.0f, -6.0f, 1.0f, /// 4
+		-6.0f, -7.0f, 0.0f, /// 1
+		-6.0f, -6.0f, 1.0f, /// 4
+		-6.0f, -7.0f, 1.0f, /// 5
+		/// left
+		-6.0f, -6.0f, 0.0f, /// 0
+		-7.0f, -6.0f, 0.0f, /// 2
+		-6.0f, -6.0f, 1.0f, /// 4
+		-7.0f, -6.0f, 0.0f, /// 2
+		-6.0f, -6.0f, 1.0f, /// 4
+		-7.0f, -6.0f, 1.0f, /// 6
+		/// right
+		-6.0f, -7.0f, 0.0f, /// 1
+		-7.0f, -7.0f, 0.0f, /// 3
+		-6.0f, -7.0f, 1.0f, /// 5
+		-7.0f, -7.0f, 0.0f, /// 3
+		-6.0f, -7.0f, 1.0f, /// 5
+		-7.0f, -7.0f, 1.0f, /// 7
+		/// top
+		-7.0f, -6.0f, 0.0f, /// 2
+		-7.0f, -7.0f, 0.0f, /// 3
+		-7.0f, -6.0f, 1.0f, /// 6
+		-7.0f, -7.0f, 0.0f, /// 3
+		-7.0f, -6.0f, 1.0f, /// 6
+		-7.0f, -7.0f, 1.0f, /// 7
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	unsigned int indices[] = {
-		0, 1, 2, 1, 2, 3, ///
-		0, 1, 4, 1, 4, 5, ///
-		0, 2, 4, 2, 4, 6, ///
-		1, 3, 5, 3, 5, 7, ///
-		2, 3, 6, 3, 6, 7, ///
-		4, 5, 6, 5, 6, 7, ///
-		///
-		8, 9, 10, 9, 10, 11,	///
-		8, 9, 12, 9, 12, 13,	///
-		8, 10, 12, 10, 12, 14,	///
-		9, 11, 13, 11, 13, 15,	///
-		10, 11, 14, 11, 14, 15, ///
-		12, 13, 14, 13, 14, 15, ///
-	};
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
-				 GL_STATIC_DRAW);
 
 	Shader *baseShader = new Shader("vertex.glsl", "fragment.glsl");
 
@@ -180,7 +230,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glfwPollEvents();
 		process_key_input(window);
@@ -192,13 +242,12 @@ int main() {
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		baseShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		lightingShader->use();
 		lightingShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(lightingVAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,
-					   (void *)(36 * sizeof(unsigned int)));
+		glDrawArrays(GL_TRIANGLES, 36, 36);
 		glfwSwapBuffers(window);
 	}
 
