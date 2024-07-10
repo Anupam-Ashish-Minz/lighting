@@ -102,8 +102,8 @@ int main() {
 	}
 
 	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEPTH_TEST);
 	glDebugMessageCallback(MessageCallback, 0);
+	glEnable(GL_DEPTH_TEST);
 
 	unsigned int VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);

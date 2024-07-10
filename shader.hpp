@@ -69,6 +69,7 @@ class Shader {
 					  << std::endl;
 			glGetProgramInfoLog(this->ID, S_LOG_BUF, &len, log);
 			std::cerr << log << std::endl;
+			exit(-1);
 		}
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
