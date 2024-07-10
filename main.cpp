@@ -1,7 +1,6 @@
 #include "shader.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <functional>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
