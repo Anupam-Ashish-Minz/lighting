@@ -2,7 +2,6 @@
 #include "shader.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/ext/quaternion_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -148,19 +147,24 @@ int main() {
 		camera->process_key_input(window);
 
 		view = camera->view();
-
+		model = glm::mat4(1.0f);
 		lightPos = glm::vec3(glm::vec4(lightPos, 1.0f) * rotationMatrix);
 
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		model = glm::mat4(1.0f);
 		baseShader->setMVPMatrix(model, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		baseShader->setMVPMatrix(model, view, projection);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4(1.0f);
 		lightingShader->use();
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
