@@ -153,6 +153,7 @@ int main() {
 		model = glm::mat4(1.0f);
 		baseShader->setMVPMatrix(model, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
+		baseShader->setUniformVec3("viewPos", camera->getPos());
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
