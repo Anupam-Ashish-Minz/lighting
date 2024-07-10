@@ -136,7 +136,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, MouseInputCallback);
 
-	glm::vec3 lightPos = glm::vec3(0.5f, -2.5f, 3.0f);
+	glm::vec3 lightPos = glm::vec3(0.5f, -0.5f, 3.0f);
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
