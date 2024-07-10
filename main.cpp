@@ -2,6 +2,7 @@
 #include "shader.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/ext/quaternion_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -135,7 +136,9 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, MouseInputCallback);
 
-	glm::vec3 lightPos = glm::vec3(1.0f, -1.5f, 4.0f);
+	glm::vec3 lightPos = glm::vec3(0.5f, -2.5f, 3.0f);
+	glm::mat4 rotationMatrix =
+		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -145,6 +148,8 @@ int main() {
 		camera->process_key_input(window);
 
 		view = camera->view();
+
+		lightPos = glm::vec3(glm::vec4(lightPos, 1.0f) * rotationMatrix);
 
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
