@@ -209,7 +209,7 @@ int main() {
 
 		glBindVertexArray(teapotVAO);
 		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
-		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
+		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 9);
 
 		// glBindVertexArray(VAO);
 		// glBindBuffer(GL_ARRAY_BUFFER, VBO);
