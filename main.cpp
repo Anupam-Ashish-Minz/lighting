@@ -137,7 +137,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, MouseInputCallback);
 
-	glm::vec3 lightPos = glm::vec3(1.5f, -1.5f, -3.0f);
+	glm::vec3 lightPos = glm::vec3(1.5f, -1.5f, 3.0f);
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -201,6 +201,8 @@ int main() {
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		teapotModel = glm::rotate(teapotModel, glm::radians(1.0f),
+								  glm::vec3(0.0f, 1.0f, 0.0f));
 		baseShader->setMVPMatrix(teapotModel, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
@@ -215,7 +217,7 @@ int main() {
 
 		lightingShader->use();
 		model = glm::translate(glm::mat4(1.0f),
-							   glm::vec3(lightPos.x, lightPos.y, -lightPos.z));
+							   glm::vec3(lightPos.x, lightPos.y, lightPos.z));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		lightingShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(lightingVAO);
