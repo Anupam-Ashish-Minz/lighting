@@ -2,6 +2,7 @@
 #include "shader.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cstdio>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -138,6 +139,37 @@ int main() {
 	glm::vec3 lightPos = glm::vec3(5.5f, -5.5f, 3.0f);
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
+
+	FILE *teapot_file = fopen("teapot_bezier0.tris.txt", "r");
+	if (teapot_file == NULL) {
+		perror("error opening file");
+		return -1;
+	}
+
+	unsigned int triangle_count;
+	fscanf(teapot_file, "%d", &triangle_count);
+	float a, b, c;
+	unsigned int teapot_size = triangle_count * 6;
+	float *teapot_data = (float *)malloc(teapot_size);
+	int count = 0;
+	while ((fscanf(teapot_file, "%f %f %f", &a, &b, &c)) != EOF) {
+		teapot_data[count] = a;
+		teapot_data[count + 1] = a;
+		teapot_data[count + 2] = a;
+		count += 3;
+	}
+	fclose(teapot_file);
+
+	unsigned int teapotVAO, teapotVBO;
+	glGenVertexArrays(1, &teapotVAO);
+	glGenBuffers(1, &teapotVBO);
+	glBindVertexArray(teapotVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
+	glBufferData(GL_ARRAY_BUFFER, teapot_size, teapot_data, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
+						  (void *)(3 * sizeof(float)));
+	glEnableVertexAttribArray(0);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
