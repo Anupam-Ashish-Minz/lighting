@@ -14,5 +14,5 @@ void main() {
 	vec4 mpos =  model * vec4(aPos, 1.0);
 	gl_Position = projection * view * mpos;
 	fragNormal = aNormal;
-	fragPos = mpos.xyz;
+	fragPos = vec3(mpos);
 }

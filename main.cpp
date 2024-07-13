@@ -137,7 +137,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, MouseInputCallback);
 
-	glm::vec3 lightPos = glm::vec3(5.5f, -5.5f, 3.0f);
+	glm::vec3 lightPos = glm::vec3(1.5f, -1.5f, -3.0f);
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -184,7 +184,7 @@ int main() {
 	glEnableVertexAttribArray(1);
 
 	glm::mat4 teapotModel = glm::mat4(1.0f);
-	teapotModel = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f),
+	teapotModel = glm::rotate(teapotModel, glm::radians(180.0f),
 							  glm::vec3(1.0f, 0.0f, 0.0f));
 
 	while (!glfwWindowShouldClose(window)) {
@@ -205,16 +205,17 @@ int main() {
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
 
-		glBindVertexArray(teapotVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
-		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
+		// glBindVertexArray(teapotVAO);
+		// glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
+		// glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
 
-		// glBindVertexArray(VAO);
-		// glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		// glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		lightingShader->use();
-		model = glm::translate(glm::mat4(1.0f), lightPos);
+		model = glm::translate(glm::mat4(1.0f),
+							   glm::vec3(lightPos.x, lightPos.y, -lightPos.z));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		lightingShader->setMVPMatrix(model, view, projection);
 		glBindVertexArray(lightingVAO);
