@@ -137,7 +137,7 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, MouseInputCallback);
 
-	glm::vec3 lightPos = glm::vec3(1.5f, -1.5f, 3.0f);
+	glm::vec3 lightPos = glm::vec3(5.5f, -5.5f, 3.0f);
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -148,22 +148,28 @@ int main() {
 	}
 
 	unsigned int triangle_count;
-	fscanf(teapot_file, "%d", &triangle_count);
+	if (fscanf(teapot_file, "%d", &triangle_count) != 1) {
+		printf("failed to read the triangle count from file\n");
+		return -1;
+	}
 	float a, b, c;
-	unsigned int teapot_size = triangle_count * 18;
-	float *teapot_data = (float *)malloc(teapot_size * sizeof(float));
 	int count = 0;
+	int teapot_size = sizeof(float) * triangle_count * 18;
+	float *teapot_data = (float *)malloc(teapot_size);
 	while (true) {
 		int res = fscanf(teapot_file, "%f %f %f", &a, &b, &c);
 		if (res == EOF) {
 			break;
 		}
-		teapot_data[count] = a;
-		teapot_data[count + 1] = b;
-		teapot_data[count + 2] = c;
-		count += 3;
+		if (res == 3) {
+			teapot_data[count] = a;
+			teapot_data[count + 1] = b;
+			teapot_data[count + 2] = c;
+			count += 3;
+		} else {
+			printf("some unexpected line encountered in teapot model file\n");
+		}
 	}
-	fclose(teapot_file);
 
 	unsigned int teapotVAO, teapotVBO;
 	glGenVertexArrays(1, &teapotVAO);
@@ -176,6 +182,10 @@ int main() {
 						  (void *)(3 * sizeof(float)));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+
+	glm::mat4 teapotModel = glm::mat4(1.0f);
+	teapotModel = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f),
+							  glm::vec3(1.0f, 0.0f, 0.0f));
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -191,17 +201,17 @@ int main() {
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		baseShader->setMVPMatrix(model, view, projection);
+		baseShader->setMVPMatrix(teapotModel, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
+
+		glBindVertexArray(teapotVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
+		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
 
 		// glBindVertexArray(VAO);
 		// glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		// glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		glBindVertexArray(teapotVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
-		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 3);
 
 		lightingShader->use();
 		model = glm::translate(glm::mat4(1.0f), lightPos);
