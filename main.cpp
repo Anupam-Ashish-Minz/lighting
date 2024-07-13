@@ -205,13 +205,13 @@ int main() {
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
 
-		// glBindVertexArray(teapotVAO);
-		// glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
-		// glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
+		glBindVertexArray(teapotVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
+		glDrawArrays(GL_TRIANGLES, 0, triangle_count * 18);
 
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// glBindVertexArray(VAO);
+		// glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		// glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		lightingShader->use();
 		model = glm::translate(glm::mat4(1.0f),
