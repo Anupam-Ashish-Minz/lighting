@@ -160,14 +160,6 @@ int main() {
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		for (int i = 1; i <= 10; i++) {
-			model = glm::translate(glm::mat4(1.0f),
-								   glm::vec3(-3.0f * i, 0.0f, -3.0f * i));
-			baseShader->setMVPMatrix(model, view, projection);
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-
 		model = glm::mat4(1.0f);
 		lightingShader->use();
 		model = glm::translate(model, lightPos);
