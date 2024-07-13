@@ -18,12 +18,16 @@ class Camera {
 	float lastX, lastY;
 	float yaw = -90.0f;
 	float pitch = 0.0f;
+	float lastFrame = 0.0f;
 
   public:
 	Camera() {}
 
 	void process_key_input(GLFWwindow *window) {
-		const float cameraSpeed = 0.05f;
+		float currentFrame = (float)glfwGetTime();
+		float deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		const float cameraSpeed = 10.0f * deltaTime;
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraFront;
 		}
