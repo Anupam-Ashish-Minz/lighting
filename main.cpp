@@ -2,11 +2,12 @@
 #include "shader.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cstdio>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define WIDTH 1920
 #define HEIGHT 1080
@@ -140,7 +141,7 @@ int main() {
 	glm::mat4 rotationMatrix =
 		glm::rotate(glm::mat4(1.0f), 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	FILE *teapot_file = fopen("teapot_bezier0.tris.txt", "r");
+	FILE *teapot_file = fopen("teapot_bezier0.norm.txt", "r");
 	if (teapot_file == NULL) {
 		perror("error opening file");
 		return -1;
@@ -149,14 +150,14 @@ int main() {
 	unsigned int triangle_count;
 	fscanf(teapot_file, "%d", &triangle_count);
 	float a, b, c;
-	unsigned int teapot_size = triangle_count * 6;
-	float *teapot_data = (float *)malloc(teapot_size);
+	unsigned int teapot_size = triangle_count * 18;
+	float *teapot_data = (float *)malloc(teapot_size * sizeof(float));
 	int count = 0;
-	while ((fscanf(teapot_file, "%f %f %f", &a, &b, &c)) != EOF) {
-		teapot_data[count] = a;
-		teapot_data[count + 1] = a;
-		teapot_data[count + 2] = a;
-		count += 3;
+	while (true) {
+		int res = fscanf(teapot_file, "%f %f %f", &a, &b, &c);
+		if (res == EOF) {
+			break;
+		}
 	}
 	fclose(teapot_file);
 
