@@ -187,6 +187,8 @@ int main() {
 	teapotModel = glm::rotate(teapotModel, glm::radians(180.0f),
 							  glm::vec3(1.0f, 0.0f, 0.0f));
 
+	float lastFrame = 0.0f;
+
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -198,10 +200,14 @@ int main() {
 		model = glm::mat4(1.0f);
 		// lightPos = glm::vec3(glm::vec4(lightPos, 1.0f) * rotationMatrix);
 
+		float currentFrame = (float)glfwGetTime();
+		float deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		baseShader->setUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		teapotModel = glm::rotate(teapotModel, glm::radians(1.0f),
+		teapotModel = glm::rotate(teapotModel, glm::radians(100.0f * deltaTime),
 								  glm::vec3(0.0f, 1.0f, 0.0f));
 		baseShader->setMVPMatrix(teapotModel, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
@@ -223,6 +229,8 @@ int main() {
 		glBindVertexArray(lightingVAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glDrawArrays(GL_TRIANGLES, 72, 36);
+
+		// glfwSwapInterval(0);
 
 		glfwSwapBuffers(window);
 	}
