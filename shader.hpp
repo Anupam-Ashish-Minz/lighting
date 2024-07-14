@@ -90,6 +90,10 @@ class Shader {
 					 glm::value_ptr(value));
 	}
 
+	void setUniformFloat(const char *name, float value) {
+		glUniform1f(glGetUniformLocation(this->ID, name), value);
+	}
+
 	void setMVPMatrix(glm::mat4 model, glm::mat4 view, glm::mat4 projection) {
 		glUniformMatrix4fv(this->u_Model, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(this->u_View, 1, GL_FALSE, glm::value_ptr(view));

@@ -38,10 +38,9 @@ vec3 specular_light(vec3 lightPos, vec3 lightColor) {
 }
 
 void main() {
-	float ambientStrength = 0.1;
-	vec3 ambient = lightColor * material.ambient;
-	vec3 diffuse = diffuse_light(lightPos, lightColor);
-	vec3 specular = specular_light(lightPos, lightColor);
+	vec3 ambient = vec3(0.1) * lightColor * material.ambient;
+	vec3 diffuse = vec3(1.0) * diffuse_light(lightPos, lightColor);
+	vec3 specular = vec3(1.0) * specular_light(lightPos, lightColor);
 
 	vec3 res = (ambient + diffuse + specular) * objectColor;
 	fragColor = vec4(res, 1.0);
