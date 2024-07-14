@@ -188,9 +188,7 @@ int main() {
 							  glm::vec3(1.0f, 0.0f, 0.0f));
 
 	float lastFrame = 0.0f;
-	glm::vec3 lightPos2 = glm::vec3(-3.0f, -5.0f, 3.0f);
 	glm::vec3 lightColor1 = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec3 lightColor2 = glm::vec3(0.4f, 0.4f, 0.8f);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -215,8 +213,6 @@ int main() {
 		baseShader->setMVPMatrix(teapotModel, view, projection);
 		baseShader->setUniformVec3("lightPos", lightPos);
 		baseShader->setUniformVec3("viewPos", camera->getPos());
-		baseShader->setUniformVec3("lightPos2", lightPos2);
-		baseShader->setUniformVec3("lightColor2", lightColor2);
 
 		glBindVertexArray(teapotVAO);
 		glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
@@ -231,15 +227,6 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		lightingShader->setMVPMatrix(model, view, projection);
 		lightingShader->setUniformVec3("lightBoxColor", lightColor1);
-		glBindVertexArray(lightingVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glDrawArrays(GL_TRIANGLES, 72, 36);
-
-		lightingShader->use();
-		model = glm::translate(glm::mat4(1.0f), lightPos2);
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		lightingShader->setMVPMatrix(model, view, projection);
-		lightingShader->setUniformVec3("lightBoxColor", lightColor2);
 		glBindVertexArray(lightingVAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glDrawArrays(GL_TRIANGLES, 72, 36);
