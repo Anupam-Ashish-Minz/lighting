@@ -208,11 +208,18 @@ int main() {
 		baseShader->use();
 		baseShader->setUniformVec3("objectColor",
 								   glm::vec3(0.721569f, 0.45098f, 0.2f));
-		baseShader->setUniformVec3("lightColor", lightColor1);
 		teapotModel = glm::rotate(teapotModel, glm::radians(100.0f * deltaTime),
 								  glm::vec3(0.0f, 1.0f, 0.0f));
 		baseShader->setMVPMatrix(teapotModel, view, projection);
-		baseShader->setUniformVec3("lightPos", lightPos);
+
+		baseShader->setUniformVec3("light.position", lightPos);
+		baseShader->setUniformVec3("light.ambient",
+								   glm::vec3(0.2f, 0.2f, 0.2f));
+		baseShader->setUniformVec3("light.diffuse",
+								   glm::vec3(0.5f, 0.5f, 0.5f));
+		baseShader->setUniformVec3("light.specular",
+								   glm::vec3(1.0f, 1.0f, 1.0f));
+
 		baseShader->setUniformVec3("viewPos", camera->getPos());
 
 		baseShader->setUniformVec3("material.ambient",
