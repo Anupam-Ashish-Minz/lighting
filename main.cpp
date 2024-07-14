@@ -206,8 +206,6 @@ int main() {
 		lastFrame = currentFrame;
 
 		baseShader->use();
-		baseShader->setUniformVec3("objectColor",
-								   glm::vec3(0.721569f, 0.45098f, 0.2f));
 		teapotModel = glm::rotate(teapotModel, glm::radians(100.0f * deltaTime),
 								  glm::vec3(0.0f, 1.0f, 0.0f));
 		baseShader->setMVPMatrix(teapotModel, view, projection);
