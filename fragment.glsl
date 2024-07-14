@@ -3,6 +3,8 @@
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
+uniform vec3 lightColor2;
+uniform vec3 lightPos2;
 uniform vec3 viewPos;
 
 in vec3 fragNormal;
@@ -32,9 +34,13 @@ vec3 specular_light(vec3 lightPos, vec3 lightColor) {
 void main() {
 	float ambientStrength = 0.1;
 	vec3 ambientColor = ambientStrength * lightColor;
-
 	vec3 diffuse = diffuse_light(lightPos, lightColor);
 	vec3 specular = specular_light(lightPos, lightColor);
-	vec3 res = (ambientColor + diffuse + specular) * objectColor;
+
+	vec3 ambientColor2 = ambientStrength * lightColor2;
+	vec3 diffuse2 = diffuse_light(lightPos2, lightColor2);
+	vec3 specular2 = specular_light(lightPos2, lightColor2);
+
+	vec3 res = (ambientColor + diffuse + specular + ambientColor2 + diffuse2 + specular2) * objectColor;
 	fragColor = vec4(res, 1.0);
 }
